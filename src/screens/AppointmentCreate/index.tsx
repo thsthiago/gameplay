@@ -25,9 +25,17 @@ export const AppointmentCreate = () => {
     setOpenGuildsModal(true)
   }
 
+  function handleCloseGuilds () {
+    setOpenGuildsModal(false)
+  }
+
   function handleOpenSelect (guildSelect: GuildProps) {
     setGuild(guildSelect)
     setOpenGuildsModal(false)
+  }
+
+  function handleCategorySelect(categodyId: string) {
+    setCategory(categodyId)
   }
 
   return (
@@ -47,7 +55,7 @@ export const AppointmentCreate = () => {
 
           <CategorySelect 
             hasCheckBox 
-            setCategory={setCategory}
+            setCategory={handleCategorySelect}
             categorySelected={category}
           />
 
@@ -77,7 +85,7 @@ export const AppointmentCreate = () => {
           
             <View style={styles.field}>
               <View>
-                <Text style={styles.label}>Dia e mês</Text>
+                <Text style={[styles.label, { marginBottom: 12 }]}>Dia e mês</Text>
 
                 <View style={styles.column}>
                   <SmallInput maxLength={2}/>
@@ -89,7 +97,7 @@ export const AppointmentCreate = () => {
               </View>
 
               <View>
-                <Text style={styles.label}>Hora e minuto</Text>
+                <Text style={[styles.label, { marginBottom: 12 }]}>Hora e minuto</Text>
 
                 <View style={styles.column}>
                   <SmallInput maxLength={2}/>
@@ -123,7 +131,7 @@ export const AppointmentCreate = () => {
         </Background>
       </ScrollView>
 
-      <ModalView visible={openGuildModal}>
+      <ModalView visible={openGuildModal} closeModal={handleCloseGuilds}>
         <Guilds handleGuildSelect={handleOpenSelect}/>
       </ModalView>
     </KeyboardAvoidingView>
