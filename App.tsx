@@ -7,6 +7,8 @@ import AppLoading from 'expo-app-loading'
 import { StatusBar } from 'react-native'
 import { Router } from './src/routes'
 import { Background } from './src/components/Background'
+import { Provider } from 'react-redux'
+import store from './src/store'
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -27,7 +29,9 @@ const App = () => {
         backgroundColor="transparent"
         translucent
       />
-      <Router />
+      <Provider store={store}>
+        <Router />
+      </Provider>
     </Background>
   )
 }

@@ -10,11 +10,21 @@ import { Background } from '../../components/Background'
 import IllustrationImg from '../../assets/illustration.png'
 import { styles } from './styles'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { User } from '../../store/modules/auth/reducers'
+
+export type stateProps = {
+  auth: {
+    user: User
+  }
+}
 
 export const SignIn = () => {
   const navigation = useNavigation()
+  const { user } = useSelector((state: stateProps) => state.auth)
 
   function handleSignIn () {
+    console.log(user)
     navigation.navigate('Home')
   }
 

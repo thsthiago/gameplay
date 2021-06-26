@@ -1,0 +1,5 @@
+const AUTENTICACAO = 'AUTENTICACAO'
+
+export {
+  AUTENTICACAO
+}
