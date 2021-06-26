@@ -1,12 +1,16 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 
-import { AuthRoutes } from './auth.routes'
+import { AppRoutes } from './app.routes'
+import { useSelector } from 'react-redux'
+import { SignIn, stateProps } from '../screens/SignIn'
 
 export const Router = () => {
-  return (
+  const { user } = useSelector((state: stateProps) => state.auth)
+  
+  return user.id !== "" ? (
     <NavigationContainer>
-      <AuthRoutes />
+      <AppRoutes /> 
     </NavigationContainer>
-  )
+  ) : <SignIn />
 }

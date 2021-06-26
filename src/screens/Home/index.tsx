@@ -11,10 +11,13 @@ import { Appointment } from "../../components/Appointment"
 import { ListDivider } from "../../components/ListDivider"
 import { Background } from '../../components/Background'
 import { useNavigation } from "@react-navigation/native"
+import { useSelector } from "react-redux"
+import { stateProps } from "../SignIn"
 
 export const Home = () => {
   const [category, setCategory] = useState('')
   const navegation = useNavigation()
+  const { user } = useSelector((state: stateProps) => state.auth)
 
   const appointments = [
     {

@@ -2,30 +2,43 @@ import React from 'react'
 import { 
   View, 
   Text, 
-  Image
+  Image,
+  Alert,
+  ActivityIndicator
 } from 'react-native'
 
 import { ButtonIcon } from '../../components/ButtonIcon'
 import { Background } from '../../components/Background'
 import IllustrationImg from '../../assets/illustration.png'
 import { styles } from './styles'
-import { useNavigation } from '@react-navigation/native'
-import { useSelector } from 'react-redux'
-import { User } from '../../store/modules/auth/reducers'
+import { useDispatch, useSelector } from 'react-redux'
+import { signIn, User } from '../../store/modules/auth/reducers'
+import { authUser, isLoading } from '../../store/modules/auth/actions'
+import { theme } from '../../global/styles/theme'
 
 export type stateProps = {
   auth: {
-    user: User
+    user: User,
+    loading: boolean
   }
 }
 
 export const SignIn = () => {
-  const navigation = useNavigation()
-  const { user } = useSelector((state: stateProps) => state.auth)
+  const { loading } = useSelector((state: stateProps) => state.auth)
+  const dispath = useDispatch()
 
-  function handleSignIn () {
-    console.log(user)
-    navigation.navigate('Home')
+  async function handleSignIn () {
+    try {
+      const user = await signIn()
+      dispath(authUser(user))
+    } catch (err) {
+      Alert.alert(err)
+    }
+  }
+
+  function handleLoading() {
+    handleSignIn()
+    dispath(isLoading())
   }
 
   return (
@@ -49,7 +62,11 @@ export const SignIn = () => {
             favoritos com seus amigos
           </Text>
 
-          <ButtonIcon title="Entrar com Discord" onPress={handleSignIn}/>
+          {
+            loading 
+            ? <ActivityIndicator color={theme.colors.primary}/> 
+            : <ButtonIcon title="Entrar com Discord" onPress={handleLoading}/>
+          }
         </View>
       </View>
     </Background>
