@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { View, FlatList } from 'react-native'
-import { GuildProps } from '../../components/Guild'
-import { Guild } from '../../components/Guild'
+import { Guild, GuildProps } from '../../components/Guild'
 import { ListDivider } from '../../components/ListDivider'
+import { Load } from '../../components/Load'
+import { api } from '../../services/api'
 
 import { styles } from './styles'
 
@@ -12,38 +13,44 @@ type Props = {
 }
 
 export const Guilds = ({ handleGuildSelect }: Props) => {
-  const guilds = [
-    {
-      id: '1',
-      name: 'Lendários',
-      icon: 'image.png',
-      owner: true
-    },
-    {
-      id: '2',
-      name: 'Galera do game',
-      icon: 'image.png',
-      owner: true
-    }
-  ]
-  
+  const [guilds, setGuilds] = useState<GuildProps[]>([])
+  const [loading, setLoading] = useState(true)
+
+  async function fetchGuild() {
+    const response = await api.get('/users/@me/guilds')
+    setGuilds(response.data)
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchGuild()
+  }, [])
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={guilds}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <Guild 
-            data={item} 
-            onPress={() => handleGuildSelect(item)}
+      {
+        loading 
+        ? <Load />
+        : (
+          <FlatList
+            data={guilds}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+              <Guild 
+                data={item} 
+                onPress={() => handleGuildSelect(item)}
+              />
+            )}
+            contentContainerStyle={{ paddingBottom: 30, paddingTop: 100 }}
+            showsVerticalScrollIndicator={false}
+            ItemSeparatorComponent={() => <ListDivider isCentered />}
+            ListHeaderComponent={() => <ListDivider isCentered />}
+            style={styles.guilds}
           />
-        )}
-        contentContainerStyle={{ paddingBottom: 30, paddingTop: 100 }}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <ListDivider isCentered />}
-        ListHeaderComponent={() => <ListDivider isCentered />}
-        style={styles.guilds}
-      />
+        )
+      }
+      
+      
     </View>
   )
 }

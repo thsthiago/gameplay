@@ -1,19 +1,42 @@
 import React from "react";
 
-import { View, Text } from "react-native";
-import { useSelector } from "react-redux";
+import { View, Text, Alert } from "react-native";
+import { RectButton } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
 import { stateProps } from "../../screens/SignIn";
+import { signOut } from "../../store/modules/auth/actions";
 import { Avatar } from "../Avatar";
 
 import { styles } from './styles'
 
 export const Profile = () => {
   const { user } = useSelector((state: stateProps) => state.auth)
-  console.log(user)
+  const dispath = useDispatch()
+
+  function handleSignOut () {
+    Alert.alert(
+      'Logout', 
+      'Deseja sair do GamePlay', 
+      [
+        {
+          text: 'Não',
+          style: 'cancel'
+        },
+        {
+          text: 'Sim',
+          onPress: () => {
+            dispath(signOut())
+          }
+        }
+      ]
+    )
+  }
 
   return (
     <View style={styles.container}>
-      <Avatar urlImage={user.avatar}/>
+      <RectButton onPress={handleSignOut}>
+        <Avatar urlImage={user.avatar}/>
+      </RectButton>
 
       <View>
         <View style={styles.user}>
